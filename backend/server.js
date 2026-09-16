@@ -1,7 +1,8 @@
+````javascript
 /* =====================================================
    LECTURELENS - BACKEND
-   STEP 12B - AI NOTES + TRANSLATION + IMAGE ANALYSIS
-===================================================== */
+   STEP 13 - AI NOTES + TRANSLATION + IMAGE ANALYSIS
+   ===================================================== */
 
 const express = require("express");
 const cors = require("cors");
@@ -19,7 +20,7 @@ const MODEL = "gemini-3.5-flash-lite";
 
 /* =====================================================
    MIDDLEWARE
-===================================================== */
+   ===================================================== */
 
 app.use(cors());
 
@@ -30,7 +31,7 @@ app.use(express.json({
 
 /* =====================================================
    MULTER - IMAGE UPLOAD CONFIGURATION
-===================================================== */
+   ===================================================== */
 
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -48,21 +49,26 @@ const upload = multer({
         ];
 
         if (allowedTypes.includes(file.mimetype)) {
+
             cb(null, true);
+
         } else {
+
             cb(
                 new Error(
                     "Only PNG, JPG and JPEG images are allowed."
                 )
             );
+
         }
+
     }
 });
 
 
 /* =====================================================
    CHECK GEMINI API KEY
-===================================================== */
+   ===================================================== */
 
 if (!process.env.GEMINI_API_KEY) {
 
@@ -75,21 +81,24 @@ if (!process.env.GEMINI_API_KEY) {
     console.log(
         "✅ Gemini API key loaded."
     );
+
 }
 
 
 /* =====================================================
    GEMINI TEXT API
-===================================================== */
+   ===================================================== */
 
 async function callGemini(prompt) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
+
         throw new Error(
             "GEMINI_API_KEY is missing."
         );
+
     }
 
     const url =
@@ -106,13 +115,19 @@ async function callGemini(prompt) {
         body: JSON.stringify({
 
             contents: [
+
                 {
+
                     parts: [
+
                         {
                             text: prompt
                         }
+
                     ]
+
                 }
+
             ]
 
         })
@@ -127,6 +142,7 @@ async function callGemini(prompt) {
             result?.error?.message ||
             "Gemini request failed."
         );
+
     }
 
     const aiText =
@@ -137,15 +153,17 @@ async function callGemini(prompt) {
         throw new Error(
             "Gemini returned an empty response."
         );
+
     }
 
     return aiText;
+
 }
 
 
 /* =====================================================
    GEMINI IMAGE API
-===================================================== */
+   ===================================================== */
 
 async function callGeminiWithImage(
     prompt,
@@ -160,6 +178,7 @@ async function callGeminiWithImage(
         throw new Error(
             "GEMINI_API_KEY is missing."
         );
+
     }
 
     const url =
@@ -189,15 +208,19 @@ async function callGeminiWithImage(
                         },
 
                         {
+
                             inline_data: {
 
                                 mime_type: mimeType,
 
                                 data: base64Image
+
                             }
+
                         }
 
                     ]
+
                 }
 
             ]
@@ -214,6 +237,7 @@ async function callGeminiWithImage(
             result?.error?.message ||
             "Gemini image analysis request failed."
         );
+
     }
 
     const aiText =
@@ -224,21 +248,25 @@ async function callGeminiWithImage(
         throw new Error(
             "Gemini returned an empty image analysis."
         );
+
     }
 
     return aiText;
+
 }
 
 
 /* =====================================================
    HOME ROUTE
-===================================================== */
+   ===================================================== */
 
 app.get("/", (req, res) => {
 
     res.json({
+
         message:
             "LectureLens AI Backend is running!"
+
     });
 
 });
@@ -246,7 +274,7 @@ app.get("/", (req, res) => {
 
 /* =====================================================
    GENERATE AI NOTES
-===================================================== */
+   ===================================================== */
 
 app.post(
     "/api/generate-notes",
@@ -257,23 +285,57 @@ app.post(
             const transcript =
                 req.body.transcript;
 
+            const targetLanguage =
+                req.body.targetLanguage || "English";
+
+
+            /* -----------------------------------------
+               CHECK TRANSCRIPT
+               ----------------------------------------- */
+
             if (!transcript) {
 
                 return res.status(400).json({
+
                     error:
                         "Transcript is required."
+
                 });
 
             }
 
 
-            const prompt = `
+        /* -----------------------------------------
+   AI NOTES PROMPT
+   ----------------------------------------- */
+
+const prompt = `
 You are LectureLens AI, an educational
 note-taking assistant.
 
 Analyze the following classroom lecture transcript.
 
 Create clear, useful and student-friendly study notes.
+
+IMPORTANT LANGUAGE REQUIREMENT:
+Write ALL generated content in ${targetLanguage}.
+
+This includes:
+- Lecture title
+- Summary
+- Key points
+- Concepts
+- Definitions
+- Revision questions
+- Flashcards
+- Quiz questions
+- Quiz options
+- Quiz answers
+
+IMPORTANT:
+The quiz MUST be generated in ${targetLanguage}.
+Do NOT generate quiz questions, options, or answers in English
+when the selected language is different.
 
 Return ONLY valid JSON.
 
@@ -282,26 +344,50 @@ Use exactly this structure:
 {
   "title": "Short lecture title",
   "summary": "A concise summary of the lecture",
+
   "keyPoints": [
     "Important point 1",
     "Important point 2",
     "Important point 3"
   ],
+
   "concepts": [
     "Important concept 1",
     "Important concept 2",
     "Important concept 3"
   ],
+
   "definitions": [
     {
       "term": "Term",
       "definition": "Simple definition"
     }
   ],
+
   "revisionQuestions": [
     "Question 1",
     "Question 2",
     "Question 3"
+  ],
+
+  "flashcards": [
+    {
+      "question": "Flashcard question",
+      "answer": "Flashcard answer"
+    }
+  ],
+
+  "quiz": [
+    {
+      "question": "Quiz question",
+      "options": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4"
+      ],
+      "answer": "Correct option"
+    }
   ]
 }
 
@@ -310,7 +396,15 @@ Rules:
 - Do not invent information.
 - Extract important concepts from the transcript.
 - Make notes useful for revision.
+- Create 3 to 5 flashcards.
+- Create 3 to 5 quiz questions.
+- Each quiz question must have exactly 4 options.
+- Only one option should be correct.
+- The "answer" must exactly match the correct option.
 - Do not use Markdown.
+- Keep JSON property names exactly as provided.
+- Write ALL values in ${targetLanguage}.
+- This includes every quiz question, every option, and every answer.
 - Return only the JSON object.
 
 LECTURE TRANSCRIPT:
@@ -318,10 +412,17 @@ LECTURE TRANSCRIPT:
 ${transcript}
 `;
 
+            /* -----------------------------------------
+               SEND TO GEMINI
+               ----------------------------------------- */
 
             let aiText =
                 await callGemini(prompt);
 
+
+            /* -----------------------------------------
+               CLEAN GEMINI RESPONSE
+               ----------------------------------------- */
 
             aiText = aiText
                 .replace(
@@ -339,18 +440,29 @@ ${transcript}
                 .trim();
 
 
+            /* -----------------------------------------
+               CONVERT RESPONSE TO JSON
+               ----------------------------------------- */
+
             const notes =
                 JSON.parse(aiText);
 
+
+            /* -----------------------------------------
+               SEND RESULT
+               ----------------------------------------- */
 
             res.json({
 
                 success: true,
 
-                notes: notes
+                targetLanguage:
+                    targetLanguage,
+
+                notes:
+                    notes
 
             });
-
 
         } catch (error) {
 
@@ -377,7 +489,7 @@ ${transcript}
 
 /* =====================================================
    TRANSLATE NOTES
-===================================================== */
+   ===================================================== */
 
 app.post(
     "/api/translate",
@@ -392,6 +504,10 @@ app.post(
                 req.body.targetLanguage;
 
 
+            /* -----------------------------------------
+               CHECK NOTES
+               ----------------------------------------- */
+
             if (!notes) {
 
                 return res.status(400).json({
@@ -403,6 +519,10 @@ app.post(
 
             }
 
+
+            /* -----------------------------------------
+               CHECK LANGUAGE
+               ----------------------------------------- */
 
             if (!targetLanguage) {
 
@@ -416,6 +536,10 @@ app.post(
             }
 
 
+            /* -----------------------------------------
+               TRANSLATION PROMPT
+               ----------------------------------------- */
+
             const prompt = `
 You are LectureLens AI.
 
@@ -425,6 +549,9 @@ into ${targetLanguage}.
 IMPORTANT:
 - Preserve the exact JSON structure.
 - Translate all meaningful text.
+- Translate title, summary, key points, concepts,
+  definitions, revision questions, flashcards,
+  quiz questions, quiz options, and answers if present.
 - Do not translate JSON property names.
 - Keep the content accurate.
 - Keep the language simple and student-friendly.
@@ -438,9 +565,17 @@ ${JSON.stringify(notes)}
 `;
 
 
+            /* -----------------------------------------
+               SEND TO GEMINI
+               ----------------------------------------- */
+
             let aiText =
                 await callGemini(prompt);
 
+
+            /* -----------------------------------------
+               CLEAN GEMINI RESPONSE
+               ----------------------------------------- */
 
             aiText = aiText
                 .replace(
@@ -458,9 +593,17 @@ ${JSON.stringify(notes)}
                 .trim();
 
 
+            /* -----------------------------------------
+               CONVERT TO JSON
+               ----------------------------------------- */
+
             const translatedNotes =
                 JSON.parse(aiText);
 
+
+            /* -----------------------------------------
+               SEND RESULT
+               ----------------------------------------- */
 
             res.json({
 
@@ -473,7 +616,6 @@ ${JSON.stringify(notes)}
                     translatedNotes
 
             });
-
 
         } catch (error) {
 
@@ -499,9 +641,9 @@ ${JSON.stringify(notes)}
 
 
 /* =====================================================
-   STEP 12B
+   STEP 13
    AI IMAGE / DIAGRAM ANALYSIS
-===================================================== */
+   ===================================================== */
 
 app.post(
     "/api/analyze-image",
@@ -513,7 +655,7 @@ app.post(
 
             /* -----------------------------------------
                CHECK IMAGE
-            ----------------------------------------- */
+               ----------------------------------------- */
 
             if (!req.file) {
 
@@ -528,8 +670,16 @@ app.post(
 
 
             /* -----------------------------------------
+               GET SELECTED LANGUAGE
+               ----------------------------------------- */
+
+            const targetLanguage =
+                req.body.targetLanguage || "English";
+
+
+            /* -----------------------------------------
                AI PROMPT
-            ----------------------------------------- */
+               ----------------------------------------- */
 
             const prompt = `
 You are an AI assistant inside LectureLens,
@@ -554,6 +704,18 @@ Identify what is actually visible in the image.
 
 Explain the visual in a simple,
 student-friendly way.
+
+IMPORTANT LANGUAGE REQUIREMENT:
+
+Write ALL meaningful generated content in ${targetLanguage}.
+
+This includes:
+- Title
+- Description
+- Components
+- Explanation
+- Key points
+- Accessibility-friendly alt text
 
 Pay close attention to:
 
@@ -607,12 +769,14 @@ Rules:
 - Return only the JSON object.
 - Do not invent information.
 - If something cannot be identified clearly, mention that it is unclear.
+- Keep JSON property names exactly as provided.
+- Write all values in ${targetLanguage}.
 `;
 
 
             /* -----------------------------------------
                SEND IMAGE TO GEMINI
-            ----------------------------------------- */
+               ----------------------------------------- */
 
             let aiText =
                 await callGeminiWithImage(
@@ -628,7 +792,7 @@ Rules:
 
             /* -----------------------------------------
                CLEAN GEMINI RESPONSE
-            ----------------------------------------- */
+               ----------------------------------------- */
 
             aiText = aiText
                 .replace(
@@ -648,7 +812,7 @@ Rules:
 
             /* -----------------------------------------
                CONVERT RESPONSE TO JSON
-            ----------------------------------------- */
+               ----------------------------------------- */
 
             const analysis =
                 JSON.parse(aiText);
@@ -656,17 +820,19 @@ Rules:
 
             /* -----------------------------------------
                SEND RESULT TO FRONTEND
-            ----------------------------------------- */
+               ----------------------------------------- */
 
             res.json({
 
                 success: true,
 
+                targetLanguage:
+                    targetLanguage,
+
                 analysis:
                     analysis
 
             });
-
 
         } catch (error) {
 
@@ -693,7 +859,7 @@ Rules:
 
 /* =====================================================
    START SERVER
-===================================================== */
+   ===================================================== */
 
 app.listen(PORT, () => {
 
@@ -702,3 +868,4 @@ app.listen(PORT, () => {
     );
 
 });
+````
