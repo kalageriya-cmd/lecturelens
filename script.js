@@ -1,15 +1,73 @@
 /* =====================================================
-   LECTURELENS - STEP 11C
+   LECTURELENS - STEP 13
    REAL GEMINI AI + MULTILINGUAL TRANSLATION
+   AI DIAGRAM ANALYSIS
+   SAVE DIAGRAM ANALYSIS
    ORIGINAL NOTES PRESERVED
 ===================================================== */
 
+// =====================================================
+// SECURITY VERIFICATION
+// =====================================================
 
+const securityPage = document.getElementById("securityPage");
+const securityPin = document.getElementById("securityPin");
+const verifySecurityBtn = document.getElementById("verifySecurityBtn");
+const securityError = document.getElementById("securityError");
+
+const SECURITY_PIN = "2007";
+
+if (verifySecurityBtn && securityPin) {
+
+    verifySecurityBtn.addEventListener("click", () => {
+
+        const enteredPin = securityPin.value.trim();
+
+        if (enteredPin === SECURITY_PIN) {
+
+            if (securityPage) {
+                securityPage.classList.add("hidden");
+            }
+
+            const loginPageElement =
+                document.getElementById("loginPage");
+
+            if (loginPageElement) {
+                loginPageElement.classList.remove("hidden");
+            }
+
+            if (securityError) {
+                securityError.textContent = "";
+            }
+
+            securityPin.value = "";
+
+        } else {
+
+            if (securityError) {
+                securityError.textContent =
+                    "❌ Incorrect PIN. Please try again.";
+            }
+
+            securityPin.value = "";
+            securityPin.focus();
+        }
+
+    });
+
+
+    securityPin.addEventListener("keypress", (event) => {
+
+        if (event.key === "Enter") {
+            verifySecurityBtn.click();
+        }
+
+    });
+
+}
 /* =====================================================
    LOGIN
 ===================================================== */
-
-
 
 const loginPage =
     document.getElementById("loginPage");
@@ -74,27 +132,27 @@ if (loginForm) {
                 passwordInput.value.trim();
 
 
-          if (email && password) {
+            if (email && password) {
 
-    loginError.textContent = "";
+                loginError.textContent = "";
 
-    if (rememberMe.checked) {
+                if (rememberMe.checked) {
 
-        localStorage.setItem(
-            "lectureLensLoggedIn",
-            "true"
-        );
+                    localStorage.setItem(
+                        "lectureLensLoggedIn",
+                        "true"
+                    );
 
-    }
+                }
 
-    showApplication();
+                showApplication();
 
-} else {
+            } else {
 
-    loginError.textContent =
-        "Please enter email and password.";
+                loginError.textContent =
+                    "Please enter email and password.";
 
-}
+            }
 
         }
     );
@@ -239,15 +297,19 @@ function showPage(pageId) {
     });
 
 
-    if (pageInfo[pageId]) {
+if (
+    pageInfo[pageId] &&
+    pageTitle &&
+    pageSubtitle
+) {
 
-        pageTitle.textContent =
-            pageInfo[pageId].title;
+    pageTitle.textContent =
+        pageInfo[pageId].title;
 
-        pageSubtitle.textContent =
-            pageInfo[pageId].subtitle;
+    pageSubtitle.textContent =
+        pageInfo[pageId].subtitle;
 
-    }
+}
 
 }
 
@@ -719,6 +781,63 @@ const regenerateNotesBtn =
     );
 
 
+/* =====================================================
+   GLOBAL LEARNING LANGUAGE
+===================================================== */
+
+let selectedLanguage =
+    localStorage.getItem(
+        "lectureLensLanguage"
+    ) || "English";
+
+
+const notesLanguageSelect =
+    document.getElementById(
+        "notesLanguageSelect"
+    );
+
+
+if (notesLanguageSelect) {
+
+    notesLanguageSelect.value =
+        selectedLanguage;
+
+
+    if (
+        notesLanguageSelect.value !==
+        selectedLanguage
+    ) {
+
+        selectedLanguage =
+            notesLanguageSelect.value ||
+            "English";
+
+    }
+
+
+    notesLanguageSelect.addEventListener(
+        "change",
+        function() {
+
+            selectedLanguage =
+                this.value || "English";
+
+
+            localStorage.setItem(
+                "lectureLensLanguage",
+                selectedLanguage
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   GENERATE SMART NOTES
+===================================================== */
+
 async function generateSmartNotes() {
 
     let text =
@@ -794,20 +913,20 @@ async function generateSmartNotes() {
             await fetch(
                 "http://localhost:5000/api/generate-notes",
                 {
-
                     method: "POST",
 
                     headers: {
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body: JSON.stringify({
 
                         transcript:
-                            text
+                            text,
+
+                        targetLanguage:
+                            selectedLanguage
 
                     })
 
@@ -828,11 +947,9 @@ async function generateSmartNotes() {
         if (!response.ok) {
 
             throw new Error(
-
                 data.details ||
                 data.error ||
                 "AI request failed"
-
             );
 
         }
@@ -857,13 +974,16 @@ async function generateSmartNotes() {
                 aiNotes.title ||
                 "Lecture Notes",
 
+
             date:
                 new Date()
                     .toLocaleString(),
 
+
             summary:
                 aiNotes.summary ||
                 "No summary generated.",
+
 
             keyPoints:
                 Array.isArray(
@@ -872,12 +992,14 @@ async function generateSmartNotes() {
                     ? aiNotes.keyPoints
                     : [],
 
+
             concepts:
                 Array.isArray(
                     aiNotes.concepts
                 )
                     ? aiNotes.concepts
                     : [],
+
 
             definitions:
                 Array.isArray(
@@ -886,12 +1008,20 @@ async function generateSmartNotes() {
                     ? aiNotes.definitions
                     : [],
 
+
             questions:
                 Array.isArray(
                     aiNotes.questions
                 )
                     ? aiNotes.questions
-                    : [],
+                    : (
+                        Array.isArray(
+                            aiNotes.revisionQuestions
+                        )
+                            ? aiNotes.revisionQuestions
+                            : []
+                    ),
+
 
             flashcards:
                 Array.isArray(
@@ -900,6 +1030,7 @@ async function generateSmartNotes() {
                     ? aiNotes.flashcards
                     : [],
 
+
             quiz:
                 Array.isArray(
                     aiNotes.quiz
@@ -907,26 +1038,22 @@ async function generateSmartNotes() {
                     ? aiNotes.quiz
                     : [],
 
+
             transcript:
                 data.transcript ||
-                text
+                text,
+
+
+            translatedLanguage:
+                selectedLanguage
 
         };
 
-
-        /* ==========================================
-           IMPORTANT:
-           SAVE ORIGINAL NOTES SEPARATELY
-        ========================================== */
 
         saveOriginalNotes(
             notes
         );
 
-
-        /* ==========================================
-           CURRENT DISPLAYED NOTES
-        ========================================== */
 
         saveNotes(
             notes
@@ -955,14 +1082,9 @@ async function generateSmartNotes() {
 
 
         console.log(
-            "REAL GEMINI AI NOTES GENERATED SUCCESSFULLY!"
+            "✅ AI notes generated successfully in:",
+            selectedLanguage
         );
-
-
-        alert(
-            "✨ AI notes generated successfully!"
-        );
-
 
     } catch (error) {
 
@@ -976,7 +1098,6 @@ async function generateSmartNotes() {
             "❌ Could not generate AI notes.\n\n" +
             error.message
         );
-
 
     } finally {
 
@@ -1022,6 +1143,115 @@ if (regenerateNotesBtn) {
     );
 
 }
+
+/* =====================================================
+   MULTILINGUAL UI TEXT
+===================================================== */
+
+const uiText = {
+
+    English: {
+        summary: "Summary",
+        keyPoints: "Key Points",
+        concepts: "Important Concepts",
+        definitions: "Definitions",
+        revisionQuestions: "Revision Questions",
+        transcript: "Transcript",
+
+        flashcards: "Flashcards",
+        clickToFlip: "Click a card to flip it",
+        card: "Card",
+        answer: "Answer",
+
+        quiz: "Quiz",
+        yourScore: "Your score"
+    },
+
+    Hindi: {
+        summary: "सारांश",
+        keyPoints: "मुख्य बिंदु",
+        concepts: "महत्वपूर्ण अवधारणाएँ",
+        definitions: "परिभाषाएँ",
+        revisionQuestions: "पुनरावृत्ति प्रश्न",
+        transcript: "प्रतिलेख",
+
+        flashcards: "फ्लैशकार्ड",
+        clickToFlip: "कार्ड पलटने के लिए क्लिक करें",
+        card: "कार्ड",
+        answer: "उत्तर",
+
+        quiz: "प्रश्नोत्तरी",
+        yourScore: "आपका स्कोर"
+    },
+
+    Kannada: {
+        summary: "ಸಾರಾಂಶ",
+        keyPoints: "ಮುಖ್ಯ ಅಂಶಗಳು",
+        concepts: "ಪ್ರಮುಖ ಪರಿಕಲ್ಪನೆಗಳು",
+        definitions: "ವ್ಯಾಖ್ಯಾನಗಳು",
+        revisionQuestions: "ಪುನರವಲೋಕನ ಪ್ರಶ್ನೆಗಳು",
+        transcript: "ಪ್ರತಿಲಿಪಿ",
+
+        flashcards: "ಫ್ಲ್ಯಾಶ್‌ಕಾರ್ಡ್‌ಗಳು",
+        clickToFlip: "ಕಾರ್ಡ್ ತಿರುಗಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ",
+        card: "ಕಾರ್ಡ್",
+        answer: "ಉತ್ತರ",
+
+        quiz: "ಪ್ರಶ್ನೋತ್ತರ",
+        yourScore: "ನಿಮ್ಮ ಅಂಕ"
+    },
+
+    Marathi: {
+        summary: "सारांश",
+        keyPoints: "महत्त्वाचे मुद्दे",
+        concepts: "महत्त्वाच्या संकल्पना",
+        definitions: "व्याख्या",
+        revisionQuestions: "पुनरावलोकन प्रश्न",
+        transcript: "लिप्यंतरण",
+
+        flashcards: "फ्लॅशकार्ड्स",
+        clickToFlip: "कार्ड उलटण्यासाठी क्लिक करा",
+        card: "कार्ड",
+        answer: "उत्तर",
+
+        quiz: "प्रश्नमंजुषा",
+        yourScore: "तुमचा गुण"
+    },
+
+    Telugu: {
+        summary: "సారాంశం",
+        keyPoints: "ముఖ్య అంశాలు",
+        concepts: "ముఖ్యమైన భావనలు",
+        definitions: "నిర్వచనాలు",
+        revisionQuestions: "పునశ్చరణ ప్రశ్నలు",
+        transcript: "ట్రాన్స్‌క్రిప్ట్",
+
+        flashcards: "ఫ్లాష్‌కార్డులు",
+        clickToFlip: "కార్డ్‌ను తిప్పడానికి క్లిక్ చేయండి",
+        card: "కార్డ్",
+        answer: "సమాధానం",
+
+        quiz: "క్విజ్",
+        yourScore: "మీ స్కోర్"
+    },
+
+    Tamil: {
+        summary: "சுருக்கம்",
+        keyPoints: "முக்கிய குறிப்புகள்",
+        concepts: "முக்கிய கருத்துகள்",
+        definitions: "வரையறைகள்",
+        revisionQuestions: "மறுபரிசீலனை கேள்விகள்",
+        transcript: "படியெடுத்த உரை",
+
+        flashcards: "ஃப்ளாஷ்கார்டுகள்",
+        clickToFlip: "கார்டைத் திருப்ப கிளிக் செய்யவும்",
+        card: "கார்டு",
+        answer: "பதில்",
+
+        quiz: "வினாடி வினா",
+        yourScore: "உங்கள் மதிப்பெண்"
+    }
+};
 
 
 /* =====================================================
@@ -1084,11 +1314,11 @@ function displayNotes(notes) {
                 </small>
 
                 ${
-                    notes.translatedLanguage
+                    notes.translatedLanguage &&
+                    notes.translatedLanguage !== "English"
                         ? `
                             <small>
-                                🌐 Translated to
-                                ${escapeHTML(
+                                🌐 ${escapeHTML(
                                     notes.translatedLanguage
                                 )}
                             </small>
@@ -1101,9 +1331,7 @@ function displayNotes(notes) {
 
             <div class="note-section">
 
-                <h3>
-                    📌 Summary
-                </h3>
+                <h3>📌 ${uiText[notes.translatedLanguage || "English"].summary}</h3>
 
                 <p>
                     ${escapeHTML(
@@ -1116,9 +1344,7 @@ function displayNotes(notes) {
 
             <div class="note-section">
 
-                <h3>
-                    🔑 Key Points
-                </h3>
+                <h3>🔑 ${uiText[notes.translatedLanguage || "English"].keyPoints}</h3>
 
                 ${
                     keyPoints.length > 0
@@ -1145,7 +1371,6 @@ function displayNotes(notes) {
                     `<p>
                         No key points generated.
                     </p>`
-
                 }
 
             </div>
@@ -1153,9 +1378,7 @@ function displayNotes(notes) {
 
             <div class="note-section">
 
-                <h3>
-                    💡 Important Concepts
-                </h3>
+                <h3>💡 ${uiText[notes.translatedLanguage || "English"].concepts}</h3>
 
                 ${
                     concepts.length > 0
@@ -1182,7 +1405,6 @@ function displayNotes(notes) {
                     `<p>
                         No concepts generated.
                     </p>`
-
                 }
 
             </div>
@@ -1190,9 +1412,7 @@ function displayNotes(notes) {
 
             <div class="note-section">
 
-                <h3>
-                    📖 Definitions
-                </h3>
+                <h3>📖 ${uiText[notes.translatedLanguage || "English"].definitions}</h3>
 
                 ${
                     definitions.length > 0
@@ -1254,7 +1474,6 @@ function displayNotes(notes) {
                     `<p>
                         No definitions generated.
                     </p>`
-
                 }
 
             </div>
@@ -1262,9 +1481,7 @@ function displayNotes(notes) {
 
             <div class="note-section">
 
-                <h3>
-                    ❓ Revision Questions
-                </h3>
+                <h3>❓ ${uiText[notes.translatedLanguage || "English"].revisionQuestions}</h3>
 
                 ${
                     questions.length > 0
@@ -1293,7 +1510,6 @@ function displayNotes(notes) {
                     `<p>
                         No revision questions generated.
                     </p>`
-
                 }
 
             </div>
@@ -1301,9 +1517,7 @@ function displayNotes(notes) {
 
             <div class="note-section">
 
-                <h3>
-                    🎙️ Transcript
-                </h3>
+                <h3>🎙️ ${uiText[notes.translatedLanguage || "English"].transcript}</h3>
 
                 <p>
                     ${escapeHTML(
@@ -1415,10 +1629,11 @@ function createFlashcards(notes) {
                         (notes.keyPoints || [])
                             .find(
                                 point =>
-                                    point
+                                    String(point)
                                         .toLowerCase()
                                         .includes(
-                                            concept.toLowerCase()
+                                            String(concept)
+                                                .toLowerCase()
                                         )
                             );
 
@@ -1485,6 +1700,41 @@ function loadFlashcards() {
 
 
 /* =====================================================
+   FLASHCARDS
+===================================================== */
+
+function createFlashcards(notes) {
+
+    let flashcards = [];
+
+    /* -----------------------------------------
+       USE AI GENERATED FLASHCARDS
+    ----------------------------------------- */
+
+    if (
+        Array.isArray(notes.flashcards) &&
+        notes.flashcards.length > 0
+    ) {
+
+        flashcards =
+            notes.flashcards
+                .map(card => ({
+                    question:
+                        card.question ||
+                        "",
+
+                    answer:
+                        card.answer ||
+                        ""
+                }))
+                .filter(
+                    card =>
+                        card.question &&
+                        card.answer
+                );
+    }
+
+    /* =====================================================
    DISPLAY FLASHCARDS
 ===================================================== */
 
@@ -1495,32 +1745,24 @@ function displayFlashcards(cards) {
             "flashcardContainer"
         );
 
-
     if (!container) return;
-
 
     if (
         !cards ||
         cards.length === 0
     ) {
-
         return;
-
     }
 
-
     container.innerHTML = `
-
         <p class="flashcard-number">
-            Click a card to flip it
+            ${uiText[selectedLanguage || "English"].clickToFlip}
         </p>
-
 
         ${
             cards
                 .map(
                     (card, index) => `
-
                         <div
                             class="flashcard"
                             onclick="this.classList.toggle('flipped')"
@@ -1533,7 +1775,7 @@ function displayFlashcards(cards) {
                                     <div>
 
                                         <small>
-                                            Card ${index + 1}
+                                            ${uiText[selectedLanguage || "English"].card} ${index + 1}
                                         </small>
 
                                         <h2>
@@ -1552,7 +1794,7 @@ function displayFlashcards(cards) {
                                     <div>
 
                                         <h3>
-                                            Answer
+                                           ${uiText[selectedLanguage || "English"].answer}
                                         </h3>
 
                                         <p>
@@ -1568,17 +1810,136 @@ function displayFlashcards(cards) {
                             </div>
 
                         </div>
-
-                `
+                    `
                 )
                 .join("")
         }
-
     `;
-
 }
 
+    /* -----------------------------------------
+       FALLBACK FLASHCARDS
+       IN SELECTED LANGUAGE
+    ----------------------------------------- */
 
+    if (flashcards.length === 0) {
+
+        const language =
+            notes.translatedLanguage ||
+            (notesLanguageSelect
+                ? notesLanguageSelect.value
+                : "English");
+
+
+        const fallbackText = {
+
+            English: {
+                question: concept =>
+                    `What is ${concept}?`,
+
+                answer: concept =>
+                    `Review the lecture section about ${concept}.`
+            },
+
+            Hindi: {
+                question: concept =>
+                    `${concept} क्या है?`,
+
+                answer: concept =>
+                    `${concept} के बारे में व्याख्यान के भाग को दोहराएँ।`
+            },
+
+            Kannada: {
+                question: concept =>
+                    `${concept} ಎಂದರೇನು?`,
+
+                answer: concept =>
+                    `${concept} ಬಗ್ಗೆ ಉಪನ್ಯಾಸದ ಭಾಗವನ್ನು ಪರಿಶೀಲಿಸಿ.`
+            },
+
+            Telugu: {
+                question: concept =>
+                    `${concept} అంటే ఏమిటి?`,
+
+                answer: concept =>
+                    `${concept} ಕುರಿತು ಉಪన్యాసంలోని భాగాన్ని సమీక్షించండి.`
+            },
+
+            Tamil: {
+                question: concept =>
+                    `${concept} என்றால் என்ன?`,
+
+                answer: concept =>
+                    `${concept} பற்றிய விரிவுரை பகுதியை மீண்டும் பார்க்கவும்.`
+            },
+
+            Marathi: {
+                question: concept =>
+                    `${concept} म्हणजे काय?`,
+
+                answer: concept =>
+                    `${concept} பற்றிய व्याख्यानाचा भाग पुन्हा पहा.`
+            }
+        };
+
+
+        const selectedText =
+            fallbackText[language] ||
+            fallbackText.English;
+
+
+        flashcards =
+            (notes.concepts || [])
+                .slice(0, 8)
+                .map(concept => {
+
+                    const related =
+                        (notes.keyPoints || [])
+                            .find(
+                                point =>
+                                    point
+                                        .toLowerCase()
+                                        .includes(
+                                            concept.toLowerCase()
+                                        )
+                            );
+
+
+                    return {
+
+                        question:
+                            selectedText.question(
+                                concept
+                            ),
+
+                        answer:
+                            related ||
+                            selectedText.answer(
+                                concept
+                            )
+                    };
+
+                });
+    }
+
+
+    /* -----------------------------------------
+       SAVE FLASHCARDS
+    ----------------------------------------- */
+
+    localStorage.setItem(
+        "lectureLensFlashcards",
+        JSON.stringify(
+            flashcards
+        )
+    );
+
+
+    displayFlashcards(
+        flashcards
+    );
+
+}
 /* =====================================================
    QUIZ
 ===================================================== */
@@ -1657,38 +2018,67 @@ function createQuiz(notes) {
 
 
     if (questions.length === 0) {
+    const quizTexts = {
+        English: {
+            question: "Which concept was discussed in the lecture?",
+            unrelated: "Unrelated topic",
+            random: "Random concept",
+            none: "None of these"
+        },
 
-        (notes.concepts || [])
-            .slice(0, 5)
-            .forEach(
-                concept => {
+        Hindi: {
+            question: "व्याख्यान में किस अवधारणा पर चर्चा की गई?",
+            unrelated: "असंबंधित विषय",
+            random: "यादृच्छिक अवधारणा",
+            none: "इनमें से कोई नहीं"
+        },
 
-                    questions.push({
+        Kannada: {
+            question: "ಉಪನ್ಯಾಸದಲ್ಲಿ ಯಾವ ಪರಿಕಲ್ಪನೆಯನ್ನು ಚರ್ಚಿಸಲಾಯಿತು?",
+            unrelated: "ಸಂಬಂಧವಿಲ್ಲದ ವಿಷಯ",
+            random: "ಯಾದೃಚ್ಛಿಕ ಪರಿಕಲ್ಪನೆ",
+            none: "ಇವುಗಳಲ್ಲಿ ಯಾವುದೂ ಅಲ್ಲ"
+        },
 
-                        question:
-                            "Which concept was discussed in the lecture?",
+        Telugu: {
+            question: "ఉపన్యాసంలో ఏ భావన గురించి చర్చించారు?",
+            unrelated: "సంబంధం లేని విషయం",
+            random: "యాదృచ్ఛిక భావన",
+            none: "వీటిలో ఏదీ కాదు"
+        },
 
-                        options: [
+        Tamil: {
+            question: "விரிவுரையில் எந்த கருத்து விவாதிக்கப்பட்டது?",
+            unrelated: "தொடர்பில்லாத தலைப்பு",
+            random: "சீரற்ற கருத்து",
+            none: "இவற்றில் எதுவுமில்லை"
+        },
 
-                            concept,
+        Marathi: {
+            question: "व्याख्यानात कोणत्या संकल्पनेवर चर्चा करण्यात आली?",
+            unrelated: "असंबंधित विषय",
+            random: "यादृच्छिक संकल्पना",
+            none: "यापैकी कोणतेही नाही"
+        }
+    };
 
-                            "Unrelated topic",
+    const texts = quizTexts[selectedLanguage] || quizTexts.English;
 
-                            "Random concept",
-
-                            "None of these"
-
-                        ],
-
-                        answer: 0
-
-                    });
-
-                }
-            );
-
-    }
-
+    (notes.concepts || [])
+        .slice(0, 5)
+        .forEach(concept => {
+            questions.push({
+                question: texts.question,
+                options: [
+                    concept,
+                    texts.unrelated,
+                    texts.random,
+                    texts.none
+                ],
+                answer: 0
+            });
+        });
+}
 
     localStorage.setItem(
         "lectureLensQuiz",
@@ -1946,8 +2336,15 @@ function displayQuiz(questions) {
                                 result.style.display =
                                     "block";
 
-                                result.textContent =
-                                    `🎉 Your score: ${score}/${questions.length}`;
+
+                                const language =
+    selectedLanguage || "English";
+
+const text =
+    uiText[language] || uiText.English;
+
+result.textContent =
+    `🎉 ${text.yourScore}: ${score}/${questions.length}`;
 
                             }
 
@@ -1961,24 +2358,14 @@ function displayQuiz(questions) {
 
 }
 
-
 /* =====================================================
-   STEP 11C
-   MULTILINGUAL NOTE TRANSLATION
-   ORIGINAL NOTES ARE ALWAYS USED
+   TRANSLATION
 ===================================================== */
-
-const notesLanguageSelect =
-    document.getElementById(
-        "notesLanguageSelect"
-    );
-
 
 const translateNotesBtn =
     document.getElementById(
         "translateNotesBtn"
     );
-
 
 const translationStatus =
     document.getElementById(
@@ -2001,12 +2388,6 @@ if (translateNotesBtn) {
 ===================================================== */
 
 async function translateNotes() {
-
-    /*
-       IMPORTANT:
-       Always get the ORIGINAL notes.
-       Never translate an already translated version.
-    */
 
     let originalNotes = null;
 
@@ -2037,12 +2418,6 @@ async function translateNotes() {
 
     }
 
-
-    /*
-       Backward compatibility:
-       If original notes do not exist yet,
-       use current notes and save them as original.
-    */
 
     if (!originalNotes) {
 
@@ -2091,13 +2466,18 @@ async function translateNotes() {
     const targetLanguage =
         notesLanguageSelect
             ? notesLanguageSelect.value
-            : "English";
+            : selectedLanguage || "English";
 
 
-    /*
-       If user chooses the same language as original,
-       simply show original notes.
-    */
+    selectedLanguage =
+        targetLanguage;
+
+
+    localStorage.setItem(
+        "lectureLensLanguage",
+        selectedLanguage
+    );
+
 
     if (
         targetLanguage ===
@@ -2146,14 +2526,12 @@ async function translateNotes() {
         }
 
 
+        updateDashboardStats();
+
         return;
 
     }
 
-
-    /* =================================================
-       LOADING STATE
-    ================================================= */
 
     translateNotesBtn.disabled =
         true;
@@ -2194,12 +2572,6 @@ async function translateNotes() {
 
                     body: JSON.stringify({
 
-                        /*
-                           CRITICAL:
-                           Send originalNotes,
-                           not currently displayed notes.
-                        */
-
                         notes:
                             originalNotes,
 
@@ -2227,7 +2599,9 @@ async function translateNotes() {
             throw new Error(
 
                 data.details ||
+
                 data.error ||
+
                 "Translation failed."
 
             );
@@ -2244,10 +2618,6 @@ async function translateNotes() {
         }
 
 
-        /*
-           Create translated notes object.
-        */
-
         const translatedNotes = {
 
             ...data.notes,
@@ -2262,14 +2632,6 @@ async function translateNotes() {
         };
 
 
-        /*
-           IMPORTANT:
-           Save translated notes separately
-           as the current displayed version.
-
-           Original notes remain untouched.
-        */
-
         localStorage.setItem(
             "lectureLensTranslatedNotes",
             JSON.stringify(
@@ -2283,19 +2645,10 @@ async function translateNotes() {
         );
 
 
-        /*
-           Display translated notes.
-        */
-
         displayNotes(
             translatedNotes
         );
 
-
-        /*
-           Also translate/update flashcards
-           and quiz.
-        */
 
         createFlashcards(
             translatedNotes
@@ -2340,11 +2693,10 @@ async function translateNotes() {
 
 
         alert(
-
             "❌ Could not translate notes.\n\n" +
             error.message
-
         );
+
 
     } finally {
 
@@ -2629,3 +2981,1099 @@ if (contrastBtn) {
     );
 
 }
+
+
+/* =====================================================
+   STEP 12C
+   DIAGRAM ANALYSIS FRONTEND
+===================================================== */
+
+const diagramInput =
+    document.getElementById(
+        "diagramInput"
+    );
+
+
+const diagramPreviewContainer =
+    document.getElementById(
+        "diagramPreviewContainer"
+    );
+
+
+const diagramPreview =
+    document.getElementById(
+        "diagramPreview"
+    );
+
+
+const analyzeDiagramBtn =
+    document.getElementById(
+        "analyzeDiagramBtn"
+    );
+
+
+const removeDiagramBtn =
+    document.getElementById(
+        "removeDiagramBtn"
+    );
+
+
+const diagramAnalysisStatus =
+    document.getElementById(
+        "diagramAnalysisStatus"
+    );
+
+
+const diagramAnalysisResult =
+    document.getElementById(
+        "diagramAnalysisResult"
+    );
+
+
+const diagramAnalysisContent =
+    document.getElementById(
+        "diagramAnalysisContent"
+    );
+
+
+/* =====================================================
+   IMAGE SELECT
+===================================================== */
+
+if (diagramInput) {
+
+    diagramInput.addEventListener(
+        "change",
+        function() {
+
+            const file =
+                this.files[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            const allowedTypes = [
+
+                "image/png",
+
+                "image/jpeg",
+
+                "image/jpg"
+
+            ];
+
+
+            if (
+                !allowedTypes.includes(
+                    file.type
+                )
+            ) {
+
+                alert(
+                    "Please select a PNG, JPG or JPEG image."
+                );
+
+
+                this.value = "";
+
+                return;
+
+            }
+
+
+            if (
+                file.size >
+                10 * 1024 * 1024
+            ) {
+
+                alert(
+                    "Image size must be less than 10 MB."
+                );
+
+
+                this.value = "";
+
+                return;
+
+            }
+
+
+            const imageURL =
+                URL.createObjectURL(
+                    file
+                );
+
+
+            diagramPreview.src =
+                imageURL;
+
+
+            diagramPreviewContainer
+                .classList
+                .remove(
+                    "hidden"
+                );
+
+
+            analyzeDiagramBtn.disabled =
+                false;
+
+
+            diagramAnalysisResult
+                .classList
+                .add(
+                    "hidden"
+                );
+
+
+            diagramAnalysisContent.innerHTML =
+                "";
+
+
+            if (diagramAnalysisStatus) {
+
+                diagramAnalysisStatus.textContent =
+                    "Image selected. Click Analyze Diagram with AI.";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   REMOVE IMAGE
+===================================================== */
+
+if (removeDiagramBtn) {
+
+    removeDiagramBtn.addEventListener(
+        "click",
+        function() {
+
+            if (diagramInput) {
+
+                diagramInput.value =
+                    "";
+
+            }
+
+
+            if (diagramPreview) {
+
+                diagramPreview.src =
+                    "";
+
+            }
+
+
+            if (diagramPreviewContainer) {
+
+                diagramPreviewContainer
+                    .classList
+                    .add(
+                        "hidden"
+                    );
+
+            }
+
+
+            if (analyzeDiagramBtn) {
+
+                analyzeDiagramBtn.disabled =
+                    true;
+
+            }
+
+
+            if (diagramAnalysisResult) {
+
+                diagramAnalysisResult
+                    .classList
+                    .add(
+                        "hidden"
+                    );
+
+            }
+
+
+            if (diagramAnalysisContent) {
+
+                diagramAnalysisContent.innerHTML =
+                    "";
+
+            }
+
+
+            if (diagramAnalysisStatus) {
+
+                diagramAnalysisStatus.textContent =
+                    "";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   STEP 13
+   ANALYZE + SAVE DIAGRAM ANALYSIS
+===================================================== */
+
+if (analyzeDiagramBtn) {
+
+    analyzeDiagramBtn.addEventListener(
+        "click",
+        async function() {
+
+            const file =
+                diagramInput &&
+                diagramInput.files
+                    ? diagramInput.files[0]
+                    : null;
+
+
+            if (!file) {
+
+                if (diagramAnalysisStatus) {
+
+                    diagramAnalysisStatus.textContent =
+                        "Please select an image first.";
+
+                }
+
+                return;
+
+            }
+
+
+            analyzeDiagramBtn.disabled =
+                true;
+
+
+            if (diagramAnalysisStatus) {
+
+                diagramAnalysisStatus.textContent =
+                    "🤖 AI is analyzing the diagram...";
+
+            }
+
+
+            if (diagramAnalysisResult) {
+
+                diagramAnalysisResult
+                    .classList
+                    .add(
+                        "hidden"
+                    );
+
+            }
+
+
+            try {
+
+                const formData =
+                    new FormData();
+
+
+                formData.append(
+                    "image",
+                    file
+                );
+
+
+                /*
+                   IMPORTANT:
+                   Send currently selected language
+                   to Gemini for diagram analysis.
+                */
+
+                formData.append(
+                    "targetLanguage",
+                    selectedLanguage || "English"
+                );
+
+
+                /* Send image to backend */
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/analyze-image",
+                        {
+
+                            method: "POST",
+
+                            body: formData
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Diagram AI response:",
+                    data
+                );
+
+
+                /* =================================================
+                   STEP 13: SAVE DIAGRAM ANALYSIS
+                ================================================= */
+
+                if (
+                    data.success &&
+                    data.analysis
+                ) {
+
+                    localStorage.setItem(
+                        "lectureLensDiagramAnalysis",
+                        JSON.stringify(
+                            data.analysis
+                        )
+                    );
+
+                }
+
+
+                /* Check backend response */
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        data.details ||
+
+                        data.error ||
+
+                        "Image analysis failed."
+
+                    );
+
+                }
+
+
+                if (
+                    !data.success ||
+                    !data.analysis
+                ) {
+
+                    throw new Error(
+                        "Invalid AI response."
+                    );
+
+                }
+
+
+                /* =================================================
+                   DISPLAY DIAGRAM RESULT
+                ================================================= */
+
+                const analysis =
+                    data.analysis;
+
+
+                if (diagramAnalysisContent) {
+
+                    diagramAnalysisContent.innerHTML = `
+
+                        <div class="diagram-analysis-wrapper">
+
+                            <div class="diagram-analysis-section">
+
+                                <h3>
+                                    📝 Description
+                                </h3>
+
+                                <p>
+                                    ${escapeHTML(
+                                        analysis.description ||
+                                        analysis.overview ||
+                                        "No description available."
+                                    )}
+                                </p>
+
+                            </div>
+
+
+                            ${
+                                analysis.labels &&
+                                Array.isArray(
+                                    analysis.labels
+                                ) &&
+                                analysis.labels.length > 0
+
+                                ?
+
+                                `
+
+                                <div class="diagram-analysis-section">
+
+                                    <h3>
+                                        🏷️ Labels
+                                    </h3>
+
+                                    <ul>
+
+                                        ${
+                                            analysis.labels
+                                                .map(
+                                                    label =>
+                                                        `<li>
+                                                            ${escapeHTML(
+                                                                typeof label === "object"
+                                                                    ? (
+                                                                        label.text ||
+                                                                        label.label ||
+                                                                        JSON.stringify(label)
+                                                                    )
+                                                                    : label
+                                                            )}
+                                                        </li>`
+                                                )
+                                                .join("")
+                                        }
+
+                                    </ul>
+
+                                </div>
+
+                                `
+
+                                :
+
+                                ""
+
+                            }
+
+
+                            ${
+                                analysis.components &&
+                                Array.isArray(
+                                    analysis.components
+                                ) &&
+                                analysis.components.length > 0
+
+                                ?
+
+                                `
+
+                                <div class="diagram-analysis-section">
+
+                                    <h3>
+                                        🧩 Components
+                                    </h3>
+
+                                    <ul>
+
+                                        ${
+                                            analysis.components
+                                                .map(
+                                                    component =>
+                                                        `<li>
+                                                            ${escapeHTML(
+                                                                typeof component === "object"
+                                                                    ? (
+                                                                        component.name ||
+                                                                        component.description ||
+                                                                        JSON.stringify(component)
+                                                                    )
+                                                                    : component
+                                                            )}
+                                                        </li>`
+                                                )
+                                                .join("")
+                                        }
+
+                                    </ul>
+
+                                </div>
+
+                                `
+
+                                :
+
+                                ""
+
+                            }
+
+
+                            ${
+                                analysis.steps &&
+                                Array.isArray(
+                                    analysis.steps
+                                ) &&
+                                analysis.steps.length > 0
+
+                                ?
+
+                                `
+
+                                <div class="diagram-analysis-section">
+
+                                    <h3>
+                                        🔄 Working / Flow
+                                    </h3>
+
+                                    <ol>
+
+                                        ${
+                                            analysis.steps
+                                                .map(
+                                                    step =>
+                                                        `<li>
+                                                            ${escapeHTML(
+                                                                typeof step === "object"
+                                                                    ? (
+                                                                        step.description ||
+                                                                        step.step ||
+                                                                        JSON.stringify(step)
+                                                                    )
+                                                                    : step
+                                                            )}
+                                                        </li>`
+                                                )
+                                                .join("")
+                                        }
+
+                                    </ol>
+
+                                </div>
+
+                                `
+
+                                :
+
+                                ""
+
+                            }
+
+
+                            ${
+                                analysis.keyPoints &&
+                                Array.isArray(
+                                    analysis.keyPoints
+                                ) &&
+                                analysis.keyPoints.length > 0
+
+                                ?
+
+                                `
+
+                                <div class="diagram-analysis-section">
+
+                                    <h3>
+                                        🔑 Key Points
+                                    </h3>
+
+                                    <ul>
+
+                                        ${
+                                            analysis.keyPoints
+                                                .map(
+                                                    point =>
+                                                        `<li>
+                                                            ${escapeHTML(
+                                                                point
+                                                            )}
+                                                        </li>`
+                                                )
+                                                .join("")
+                                        }
+
+                                    </ul>
+
+                                </div>
+
+                                `
+
+                                :
+
+                                ""
+
+                            }
+
+
+                            ${
+                                analysis.summary
+
+                                ?
+
+                                `
+
+                                <div class="diagram-analysis-section">
+
+                                    <h3>
+                                        📌 Summary
+                                    </h3>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            analysis.summary
+                                        )}
+                                    </p>
+
+                                </div>
+
+                                `
+
+                                :
+
+                                ""
+
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                if (diagramAnalysisResult) {
+
+                    diagramAnalysisResult
+                        .classList
+                        .remove(
+                            "hidden"
+                        );
+
+                }
+
+
+                if (diagramAnalysisStatus) {
+
+                    diagramAnalysisStatus.textContent =
+                        `✅ Diagram analyzed successfully in ${selectedLanguage || "English"}.`;
+
+                }
+
+
+                console.log(
+                    "✅ Diagram analysis completed."
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Diagram analysis error:",
+                    error
+                );
+
+
+                if (diagramAnalysisStatus) {
+
+                    diagramAnalysisStatus.textContent =
+                        "❌ Diagram analysis failed.";
+
+                }
+
+
+                alert(
+                    "❌ Could not analyze the diagram.\n\n" +
+                    error.message
+                );
+
+
+            } finally {
+
+                analyzeDiagramBtn.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+}
+
+
+
+
+/* =====================================================
+   DIAGRAM ANALYSIS RESULT DISPLAY
+===================================================== */
+
+function displaySavedDiagramAnalysis(analysis) {
+
+    if (!analysis) {
+        return;
+    }
+
+
+    let html = "";
+
+
+    /* =================================================
+       TITLE
+    ================================================= */
+
+    if (analysis.title) {
+
+        html += `
+
+            <h3>
+                📌 ${escapeHTML(
+                    analysis.title
+                )}
+            </h3>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       DESCRIPTION
+    ================================================= */
+
+    if (analysis.description) {
+
+        html += `
+
+            <div class="diagram-result-section">
+
+                <h4>
+                    📝 Description
+                </h4>
+
+                <p>
+                    ${escapeHTML(
+                        analysis.description
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       COMPONENTS
+    ================================================= */
+
+    if (
+        Array.isArray(
+            analysis.components
+        ) &&
+        analysis.components.length > 0
+    ) {
+
+        html += `
+
+            <div class="diagram-result-section">
+
+                <h4>
+                    🔹 Components
+                </h4>
+
+                <ul>
+
+        `;
+
+
+        analysis.components.forEach(
+            component => {
+
+                html += `
+
+                    <li>
+                        ${escapeHTML(
+                            typeof component === "object"
+                                ? (
+                                    component.name ||
+                                    component.description ||
+                                    JSON.stringify(component)
+                                )
+                                : component
+                        )}
+                    </li>
+
+                `;
+
+            }
+        );
+
+
+        html += `
+
+                </ul>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       EXPLANATION
+    ================================================= */
+
+    if (analysis.explanation) {
+
+        html += `
+
+            <div class="diagram-result-section">
+
+                <h4>
+                    💡 Simple Explanation
+                </h4>
+
+                <p>
+                    ${escapeHTML(
+                        analysis.explanation
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       KEY POINTS
+    ================================================= */
+
+    if (
+        Array.isArray(
+            analysis.keyPoints
+        ) &&
+        analysis.keyPoints.length > 0
+    ) {
+
+        html += `
+
+            <div class="diagram-result-section">
+
+                <h4>
+                    ⭐ Key Points
+                </h4>
+
+                <ul>
+
+        `;
+
+
+        analysis.keyPoints.forEach(
+            point => {
+
+                html += `
+
+                    <li>
+                        ${escapeHTML(
+                            typeof point === "object"
+                                ? (
+                                    point.text ||
+                                    point.description ||
+                                    JSON.stringify(point)
+                                )
+                                : point
+                        )}
+                    </li>
+
+                `;
+
+            }
+        );
+
+
+        html += `
+
+                </ul>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       ALT TEXT
+    ================================================= */
+
+    if (analysis.altText) {
+
+        html += `
+
+            <div class="diagram-result-section">
+
+                <h4>
+                    ♿ Accessibility Alt Text
+                </h4>
+
+                <p>
+                    ${escapeHTML(
+                        analysis.altText
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       DISPLAY RESULT
+    ================================================= */
+
+    if (
+        diagramAnalysisContent
+    ) {
+
+        diagramAnalysisContent.innerHTML =
+            html;
+
+    }
+
+
+    if (
+        diagramAnalysisResult
+    ) {
+
+        diagramAnalysisResult
+            .classList
+            .remove(
+                "hidden"
+            );
+
+    }
+
+
+    if (
+        diagramAnalysisStatus
+    ) {
+
+        diagramAnalysisStatus.textContent =
+            `✅ Diagram analyzed successfully in ${
+                selectedLanguage || "English"
+            }.`;
+
+    }
+
+}
+
+
+/* =====================================================
+   RESTORE SAVED DIAGRAM RESULT
+===================================================== */
+
+function restoreSavedDiagramAnalysis() {
+
+    const saved =
+        localStorage.getItem(
+            "lectureLensDiagramAnalysis"
+        );
+
+
+    if (!saved) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const analysis =
+            JSON.parse(
+                saved
+            );
+
+
+        displaySavedDiagramAnalysis(
+            analysis
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Could not restore diagram analysis:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RESTORE SAVED DIAGRAM
+===================================================== */
+
+restoreSavedDiagramAnalysis();
+
+
+/* =====================================================
+   INITIAL DASHBOARD UPDATE
+===================================================== */
+
+updateDashboardStats();
+
+
+/* =====================================================
+   INITIAL PAGE
+===================================================== */
+
+if (
+    !document.querySelector(
+        ".active-page"
+    )
+) {
+
+    showPage(
+        "dashboard"
+    );
+
+}
+
+
+/* =====================================================
+   DEBUG MESSAGE
+===================================================== */
+
+console.log(
+    "========================================"
+);
+
+console.log(
+    "🚀 LectureLens script loaded successfully."
+);
+
+console.log(
+    "🌐 Selected language:",
+    selectedLanguage
+);
+
+console.log(
+    "🤖 Gemini AI integration ready."
+);
+
+console.log(
+    "🖼️ Diagram analysis ready."
+);
+
+console.log(
+    "========================================"
+);
