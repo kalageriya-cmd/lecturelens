@@ -9,8 +9,7 @@
    LOGIN
 ===================================================== */
 
-const DEMO_EMAIL = "student@lecturelens.com";
-const DEMO_PASSWORD = "LectureLens123";
+
 
 const loginPage =
     document.getElementById("loginPage");
@@ -75,32 +74,27 @@ if (loginForm) {
                 passwordInput.value.trim();
 
 
-            if (
-                email === DEMO_EMAIL &&
-                password === DEMO_PASSWORD
-            ) {
+          if (email && password) {
 
-                loginError.textContent = "";
+    loginError.textContent = "";
 
+    if (rememberMe.checked) {
 
-                if (rememberMe.checked) {
+        localStorage.setItem(
+            "lectureLensLoggedIn",
+            "true"
+        );
 
-                    localStorage.setItem(
-                        "lectureLensLoggedIn",
-                        "true"
-                    );
+    }
 
-                }
+    showApplication();
 
+} else {
 
-                showApplication();
+    loginError.textContent =
+        "Please enter email and password.";
 
-            } else {
-
-                loginError.textContent =
-                    "Invalid email or password.";
-
-            }
+}
 
         }
     );
