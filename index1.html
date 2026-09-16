@@ -22,6 +22,58 @@
 
 <body>
 
+<!-- =====================================================
+     SECURITY VERIFICATION
+===================================================== -->
+
+<div id="securityPage" class="security-page">
+
+    <div class="security-card">
+
+        <div class="security-icon">
+            🔐
+        </div>
+
+        <h1>LectureLens</h1>
+
+        <p class="security-title">
+            Secure Access
+        </p>
+
+        <p class="security-text">
+            Please enter the security PIN to continue.
+        </p>
+
+        <div class="security-input-group">
+            <input
+                type="password"
+                id="securityPin"
+                maxlength="4"
+                placeholder="Enter 4-digit PIN"
+                inputmode="numeric"
+            >
+        </div>
+
+        <button
+            id="verifySecurityBtn"
+            class="primary-btn security-btn"
+        >
+            🔓 Verify Access
+        </button>
+
+        <p
+            id="securityError"
+            class="error-message"
+        ></p>
+
+        <p class="security-demo">
+            Secure Prototype Access
+        </p>
+
+    </div>
+
+</div> 
+
 
 <!-- =====================================================
      LOGIN PAGE
