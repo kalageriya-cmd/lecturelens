@@ -2,6 +2,7 @@
    LECTURELENS - COMPLETE STYLE SHEET
    ========================================================= */
 
+
 /* ================= RESET ================= */
 
 * {
@@ -46,11 +47,9 @@ textarea {
 
 .login-page {
     min-height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     padding: 25px;
 
     background:
@@ -59,9 +58,6 @@ textarea {
         linear-gradient(135deg, #eef6ff, #f7f9ff);
 }
 
-
-/* Login container */
-
 .login-container {
     width: 100%;
     display: flex;
@@ -69,20 +65,13 @@ textarea {
     align-items: center;
 }
 
-
-/* Login card */
-
 .login-card,
 .login-box {
     width: 100%;
     max-width: 430px;
-
     background: rgba(255, 255, 255, 0.97);
-
     padding: 40px;
-
     border-radius: 22px;
-
     border: 1px solid rgba(255, 255, 255, 0.8);
 
     box-shadow:
@@ -92,16 +81,10 @@ textarea {
     text-align: center;
 }
 
-
-/* Logo */
-
 .logo {
     font-size: 50px;
     margin-bottom: 8px;
 }
-
-
-/* Login title */
 
 .login-card h1,
 .login-box h1 {
@@ -109,9 +92,6 @@ textarea {
     color: #111827;
     margin-bottom: 8px;
 }
-
-
-/* Subtitle */
 
 .login-subtitle,
 .subtitle {
@@ -121,53 +101,33 @@ textarea {
     margin-bottom: 28px;
 }
 
-
-/* Login form */
-
 .login-card form,
 .login-box form {
     text-align: left;
 }
 
-
-/* Labels */
-
 .login-card label,
 .login-box label {
     display: block;
-
     margin: 13px 0 7px;
-
     font-size: 14px;
     font-weight: 600;
-
     color: #374151;
 }
-
-
-/* Email + password */
 
 .login-card input[type="email"],
 .login-card input[type="password"],
 .login-box input[type="email"],
 .login-box input[type="password"] {
     width: 100%;
-
     padding: 13px 14px;
-
     border: 1px solid #cbd5e1;
-
     border-radius: 10px;
-
     background: #ffffff;
-
     color: #111827;
-
     font-size: 15px;
-
     transition: 0.2s;
 }
-
 
 .login-card input[type="email"]:focus,
 .login-card input[type="password"]:focus,
@@ -185,37 +145,26 @@ textarea {
 .remember,
 .remember-row {
     display: flex;
-
     align-items: center;
-
     gap: 8px;
-
     margin: 15px 0;
 }
-
 
 .remember label,
 .remember-row label,
 .checkbox-label {
     margin: 0 !important;
-
     font-weight: normal !important;
-
     display: flex !important;
-
     align-items: center;
-
     gap: 8px;
-
     cursor: pointer;
 }
-
 
 .remember input,
 .remember-row input,
 .checkbox-label input {
     width: auto;
-
     cursor: pointer;
 }
 
@@ -224,9 +173,7 @@ textarea {
 
 .login-btn {
     width: 100%;
-
     padding: 14px;
-
     border-radius: 10px;
 
     background: linear-gradient(
@@ -236,17 +183,13 @@ textarea {
     );
 
     color: white;
-
     font-size: 16px;
-
     font-weight: 700;
-
     transition: 0.2s;
 
     box-shadow:
         0 8px 18px rgba(37, 99, 235, 0.20);
 }
-
 
 .login-btn:hover {
     background: linear-gradient(
@@ -261,7 +204,6 @@ textarea {
         0 10px 22px rgba(37, 99, 235, 0.25);
 }
 
-
 .login-btn:active {
     transform: translateY(0);
 }
@@ -271,11 +213,8 @@ textarea {
 
 .error-message {
     min-height: 20px;
-
     color: #dc2626;
-
     font-size: 13px;
-
     margin: 8px 0;
 }
 
@@ -285,13 +224,9 @@ textarea {
 .demo,
 .demo-text {
     text-align: center;
-
     margin-top: 22px;
-
     font-size: 12px;
-
     color: #64748b;
-
     line-height: 1.6;
 }
 
@@ -302,82 +237,54 @@ textarea {
 
 .primary-btn {
     background: #667eea;
-
     color: white;
-
     padding: 12px 20px;
-
     border-radius: 10px;
-
     font-size: 15px;
-
     font-weight: 600;
-
     transition: 0.2s;
 }
-
 
 .primary-btn:hover {
     background: #5568d9;
-
     transform: translateY(-1px);
 }
-
 
 .primary-btn:disabled {
     opacity: 0.5;
-
     cursor: not-allowed;
-
     transform: none;
 }
 
-
 .secondary-btn {
     background: #eef1ff;
-
     color: #5568d9;
-
     padding: 11px 18px;
-
     border-radius: 9px;
-
     font-weight: 600;
-
     transition: 0.2s;
 }
-
 
 .secondary-btn:hover {
     background: #e0e5ff;
-
     transform: translateY(-1px);
 }
 
-
 .danger-btn {
     background: #ffe8e8;
-
     color: #d93030;
-
     padding: 12px 20px;
-
     border-radius: 10px;
-
     font-weight: 600;
-
     transition: 0.2s;
 }
-
 
 .danger-btn:hover {
     background: #ffd5d5;
 }
 
-
 .danger-btn:disabled {
     opacity: 0.5;
-
     cursor: not-allowed;
 }
 
@@ -388,9 +295,7 @@ textarea {
 
 .app {
     display: flex;
-
     min-height: 100vh;
-
     width: 100%;
 }
 
@@ -401,23 +306,19 @@ textarea {
 
 .sidebar {
     position: fixed;
-
     left: 0;
     top: 0;
     bottom: 0;
 
     width: 240px;
-
     height: 100vh;
 
     background: #ffffff;
-
     border-right: 1px solid #e4e7ec;
 
     padding: 25px 15px;
 
     display: flex;
-
     flex-direction: column;
 
     overflow-y: auto;
@@ -430,17 +331,13 @@ textarea {
 
 .sidebar-logo {
     font-size: 20px;
-
     font-weight: bold;
 
     display: flex;
-
     align-items: center;
-
     gap: 10px;
 
     padding: 10px 12px;
-
     margin-bottom: 30px;
 
     color: #111827;
@@ -451,9 +348,7 @@ textarea {
 
 .sidebar nav {
     display: flex;
-
     flex-direction: column;
-
     gap: 7px;
 }
 
@@ -462,7 +357,6 @@ textarea {
 
 .nav-btn {
     width: 100%;
-
     background: transparent;
 
     text-align: left;
@@ -478,21 +372,15 @@ textarea {
     transition: 0.2s;
 }
 
-
 .nav-btn:hover {
     background: #f3f5ff;
-
     color: #5568d9;
-
     transform: translateX(2px);
 }
 
-
 .nav-btn.active {
     background: #eef1ff;
-
     color: #5568d9;
-
     font-weight: 600;
 }
 
@@ -505,7 +393,6 @@ textarea {
     margin-top: auto;
 
     background: #fff0f0;
-
     color: #d93030;
 
     padding: 12px;
@@ -517,10 +404,8 @@ textarea {
     transition: 0.2s;
 }
 
-
 .logout-btn:hover {
     background: #ffe2e2;
-
     transform: translateY(-1px);
 }
 
@@ -529,9 +414,10 @@ textarea {
    MAIN CONTENT
    ========================================================= */
 
-.main-content {
-    width: calc(100% - 240px);
+/* FIXED: Sidebar is 240px on desktop */
 
+.main-area {
+    width: calc(100% - 240px);
     min-height: 100vh;
 
     margin-left: 240px;
@@ -548,9 +434,7 @@ textarea {
 
 .top-header {
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
 
     margin-bottom: 25px;
@@ -558,20 +442,15 @@ textarea {
     gap: 20px;
 }
 
-
 .top-header h2 {
     font-size: 26px;
-
     color: #111827;
 }
 
-
 .top-header p {
     margin-top: 5px;
-
     color: #7b8494;
 }
-
 
 .user-profile {
     background: white;
@@ -595,7 +474,6 @@ textarea {
 .page {
     display: none;
 }
-
 
 .page.active-page {
     display: block;
@@ -621,9 +499,7 @@ textarea {
     padding: 35px;
 
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
 
     min-height: 190px;
@@ -633,14 +509,11 @@ textarea {
     overflow: hidden;
 }
 
-
 .welcome-card h1,
 .welcome h1 {
     font-size: 28px;
-
     margin-bottom: 12px;
 }
-
 
 .welcome-card p,
 .welcome p {
@@ -653,11 +526,9 @@ textarea {
     opacity: 0.95;
 }
 
-
 .welcome-card .primary-btn,
 .welcome button {
     background: white;
-
     color: #2563eb;
 
     padding: 12px 20px;
@@ -669,18 +540,14 @@ textarea {
     transition: 0.2s;
 }
 
-
 .welcome-card .primary-btn:hover,
 .welcome button:hover {
     transform: translateY(-2px);
-
     background: #f8fafc;
 }
 
-
 .welcome-icon {
     font-size: 80px;
-
     margin-right: 20px;
 }
 
@@ -700,7 +567,6 @@ textarea {
     margin-bottom: 25px;
 }
 
-
 .stat-card {
     background: white;
 
@@ -718,14 +584,12 @@ textarea {
     transition: 0.2s;
 }
 
-
 .stat-card:hover {
     transform: translateY(-3px);
 
     box-shadow:
         0 8px 22px rgba(0, 0, 0, 0.07);
 }
-
 
 .stat-card span,
 .stat-icon {
@@ -736,7 +600,6 @@ textarea {
     margin-bottom: 8px;
 }
 
-
 .stat-card h2,
 .stat-card h3 {
     font-size: 27px;
@@ -746,10 +609,8 @@ textarea {
     color: #111827;
 }
 
-
 .stat-card p {
     color: #7b8494;
-
     margin-top: 5px;
 }
 
@@ -773,13 +634,10 @@ textarea {
         0 3px 12px rgba(0, 0, 0, 0.03);
 }
 
-
 .section-card h2 {
     margin-bottom: 8px;
-
     color: #111827;
 }
-
 
 .section-card > p {
     color: #70798a;
@@ -804,7 +662,6 @@ textarea {
 
     margin-top: 20px;
 }
-
 
 .quick-btn,
 .action-card {
@@ -835,7 +692,6 @@ textarea {
     cursor: pointer;
 }
 
-
 .quick-btn:hover,
 .action-card:hover {
     background: #eef1ff;
@@ -847,11 +703,9 @@ textarea {
     transform: translateY(-3px);
 }
 
-
 .action-card {
     font-size: 25px;
 }
-
 
 .action-card span {
     display: block;
@@ -876,7 +730,6 @@ textarea {
     flex-wrap: wrap;
 }
 
-
 .lecture-options {
     display: flex;
 
@@ -886,7 +739,6 @@ textarea {
 
     flex-wrap: wrap;
 }
-
 
 .lecture-options label,
 .setting label {
@@ -898,7 +750,6 @@ textarea {
 
     color: #374151;
 }
-
 
 select {
     padding: 11px 13px;
@@ -915,7 +766,6 @@ select {
 
     color: #374151;
 }
-
 
 select:focus {
     border-color: #667eea;
@@ -939,7 +789,6 @@ select:focus {
     margin-bottom: 18px;
 }
 
-
 #lectureStatus {
     margin-top: 10px;
 }
@@ -959,17 +808,13 @@ select:focus {
     gap: 15px;
 }
 
-
 .card-heading p {
     color: #7b8494;
-
     margin-top: 5px;
 }
 
-
 #recordingIndicator {
     opacity: 0.3;
-
     transition: 0.2s;
 }
 
@@ -1011,7 +856,6 @@ select:focus {
     gap: 22px;
 }
 
-
 .note-section {
     padding: 20px;
 
@@ -1024,32 +868,24 @@ select:focus {
     margin-bottom: 15px;
 }
 
-
 .note-section h3 {
     margin-bottom: 12px;
-
     color: #111827;
 }
 
-
 .note-section p {
     line-height: 1.7;
-
     color: #394150;
 }
-
 
 .note-section ul {
     padding-left: 22px;
 }
 
-
 .note-section li {
     margin-bottom: 9px;
-
     line-height: 1.6;
 }
-
 
 .concept-tag {
     display: inline-block;
@@ -1068,7 +904,6 @@ select:focus {
 
     font-weight: 600;
 }
-
 
 .question-card {
     background: white;
@@ -1104,13 +939,10 @@ select:focus {
         0 3px 12px rgba(0, 0, 0, 0.03);
 }
 
-
 .translation-box h3 {
     margin-bottom: 8px;
-
     color: #111827;
 }
-
 
 .translation-box p {
     color: #70798a;
@@ -1119,7 +951,6 @@ select:focus {
 
     margin-bottom: 15px;
 }
-
 
 .translation-controls {
     display: flex;
@@ -1130,7 +961,6 @@ select:focus {
 
     flex-wrap: wrap;
 }
-
 
 .translation-status {
     margin-top: 12px;
@@ -1160,22 +990,17 @@ select:focus {
         0 3px 12px rgba(0, 0, 0, 0.03);
 }
 
-
 .visual-analysis-header {
     margin-bottom: 20px;
 }
 
-
 .visual-analysis-header h3 {
     margin-bottom: 7px;
-
     color: #111827;
 }
 
-
 .visual-analysis-header p {
     color: #70798a;
-
     line-height: 1.6;
 }
 
@@ -1196,13 +1021,10 @@ select:focus {
     transition: 0.2s;
 }
 
-
 .diagram-upload-area:hover {
     border-color: #667eea;
-
     background: #f5f7ff;
 }
-
 
 .diagram-upload-label {
     display: block;
@@ -1213,7 +1035,6 @@ select:focus {
 
     font-weight: 600;
 }
-
 
 .diagram-upload-label span {
     display: block;
@@ -1242,7 +1063,6 @@ select:focus {
     border-radius: 12px;
 }
 
-
 .diagram-preview-container img {
     display: block;
 
@@ -1270,7 +1090,6 @@ select:focus {
     justify-content: center;
 }
 
-
 .diagram-analysis-result {
     margin-top: 20px;
 
@@ -1285,7 +1104,6 @@ select:focus {
     line-height: 1.7;
 }
 
-
 .result-heading {
     font-weight: 700;
 
@@ -1293,7 +1111,6 @@ select:focus {
 
     margin-bottom: 10px;
 }
-
 
 #diagramAnalysisContent {
     color: #394150;
@@ -1318,7 +1135,6 @@ select:focus {
     cursor: pointer;
 }
 
-
 .flashcard-inner {
     position: relative;
 
@@ -1331,11 +1147,9 @@ select:focus {
     transform-style: preserve-3d;
 }
 
-
 .flashcard.flipped .flashcard-inner {
     transform: rotateY(180deg);
 }
-
 
 .flashcard-front,
 .flashcard-back {
@@ -1368,13 +1182,11 @@ select:focus {
     line-height: 1.7;
 }
 
-
 .flashcard-back {
     transform: rotateY(180deg);
 
     background: #f2f8ff;
 }
-
 
 .flashcard-number {
     text-align: center;
@@ -1401,13 +1213,11 @@ select:focus {
     border: 1px solid #e5e8ee;
 }
 
-
 .quiz-question h3 {
     margin-bottom: 15px;
 
     color: #111827;
 }
-
 
 .quiz-option {
     display: block;
@@ -1431,7 +1241,6 @@ select:focus {
     color: #374151;
 }
 
-
 .quiz-option:hover {
     background: #eef1ff;
 
@@ -1439,7 +1248,6 @@ select:focus {
 
     transform: translateX(2px);
 }
-
 
 .quiz-result {
     padding: 18px;
@@ -1468,17 +1276,13 @@ select:focus {
     color: #7b8494;
 }
 
-
 .empty-state div {
     font-size: 45px;
-
     margin-bottom: 12px;
 }
 
-
 .empty-state h3 {
     color: #394150;
-
     margin-bottom: 8px;
 }
 
@@ -1495,7 +1299,6 @@ select:focus {
     gap: 20px;
 }
 
-
 .setting {
     background: #f8f9fc;
 
@@ -1506,10 +1309,8 @@ select:focus {
     border: 1px solid #e5e8ee;
 }
 
-
 .setting h3 {
     margin-bottom: 10px;
-
     color: #111827;
 }
 
@@ -1519,7 +1320,6 @@ select:focus {
 body.font-large {
     font-size: 18px;
 }
-
 
 body.font-xlarge {
     font-size: 21px;
@@ -1532,7 +1332,6 @@ body.spacing-wide * {
     line-height: 1.9 !important;
 }
 
-
 body.spacing-extra * {
     line-height: 2.3 !important;
 }
@@ -1542,10 +1341,8 @@ body.spacing-extra * {
 
 body.high-contrast {
     background: #000;
-
     color: #fff;
 }
-
 
 body.high-contrast .section-card,
 body.high-contrast .stat-card,
@@ -1561,7 +1358,6 @@ body.high-contrast .setting {
     border-color: #fff;
 }
 
-
 body.high-contrast .transcript-box,
 body.high-contrast .note-section,
 body.high-contrast .quiz-question,
@@ -1572,7 +1368,6 @@ body.high-contrast .diagram-upload-area {
 
     border-color: #fff;
 }
-
 
 body.high-contrast h1,
 body.high-contrast h2,
@@ -1594,7 +1389,6 @@ h4 {
     color: #111827;
 }
 
-
 p {
     line-height: 1.5;
 }
@@ -1610,7 +1404,7 @@ p {
         width: 210px;
     }
 
-    .main-content {
+    .main-area {
         width: calc(100% - 210px);
 
         margin-left: 210px;
@@ -1646,12 +1440,18 @@ p {
         padding: 20px 10px;
     }
 
-    .main-content {
+    /* FIXED: Sidebar is 190px here */
+
+    .main-area {
         width: calc(100% - 190px);
+
+        min-height: 100vh;
 
         margin-left: 190px;
 
         padding: 20px;
+
+        overflow-x: hidden;
     }
 
     .sidebar-logo {
@@ -1738,13 +1538,11 @@ p {
         overflow: visible;
     }
 
-
     .sidebar-logo {
         margin-bottom: 15px;
 
         justify-content: center;
     }
-
 
     .sidebar nav {
         flex-direction: row;
@@ -1756,7 +1554,6 @@ p {
         padding-bottom: 5px;
     }
 
-
     .nav-btn {
         width: auto;
 
@@ -1767,7 +1564,6 @@ p {
         text-align: center;
     }
 
-
     .logout-btn {
         margin-top: 15px;
     }
@@ -1775,7 +1571,7 @@ p {
 
     /* Main */
 
-    .main-content {
+    .main-area {
         width: 100%;
 
         margin-left: 0;
@@ -1794,11 +1590,9 @@ p {
         gap: 12px;
     }
 
-
     .top-header h2 {
         font-size: 23px;
     }
-
 
     .user-profile {
         width: 100%;
@@ -1820,12 +1614,10 @@ p {
         padding: 25px;
     }
 
-
     .welcome-card h1,
     .welcome h1 {
         font-size: 23px;
     }
-
 
     .welcome-icon {
         display: none;
@@ -1841,11 +1633,9 @@ p {
         gap: 12px;
     }
 
-
     .stat-card {
         padding: 18px 10px;
     }
-
 
     .stat-card h2,
     .stat-card h3 {
@@ -1862,7 +1652,6 @@ p {
         gap: 10px;
     }
 
-
     .quick-btn,
     .action-card {
         padding: 18px 10px;
@@ -1877,16 +1666,13 @@ p {
         gap: 15px;
     }
 
-
     select {
         width: 100%;
     }
 
-
     .lecture-controls {
         flex-direction: column;
     }
-
 
     .lecture-controls button {
         width: 100%;
@@ -1901,7 +1687,6 @@ p {
         align-items: stretch;
     }
 
-
     .translation-controls button {
         width: 100%;
     }
@@ -1912,7 +1697,6 @@ p {
     .flashcard {
         min-height: 220px;
     }
-
 
     .flashcard-inner,
     .flashcard-front,
@@ -1934,11 +1718,9 @@ p {
         padding: 18px;
     }
 
-
     .diagram-upload-area {
         padding: 25px 15px;
     }
-
 
     .diagram-action button {
         width: 100%;
@@ -1959,14 +1741,12 @@ p {
         grid-template-columns: 1fr;
     }
 
-
     .login-card,
     .login-box {
         padding: 25px 18px;
     }
 
-
-    .main-content {
+    .main-area {
         padding: 15px 10px;
     }
 }
@@ -1982,18 +1762,15 @@ p {
     height: 7px;
 }
 
-
 ::-webkit-scrollbar-track {
     background: #f1f3f7;
 }
-
 
 ::-webkit-scrollbar-thumb {
     background: #cbd5e1;
 
     border-radius: 10px;
 }
-
 
 ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
