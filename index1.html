@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LectureLens - AI Lecture Assistant</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     LOGIN PAGE
+===================================================== -->
+
+<div
+    id="loginPage"
+    class="login-page"
+>
+
+    <div class="login-container">
+
+        <div class="login-card">
+
+            <div class="login-logo">
+                🎓
+            </div>
+
+            <h1>
+                LectureLens
+            </h1>
+
+            <p class="login-subtitle">
+                AI-Powered Accessible Learning
+            </p>
+
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="remember-row">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                        >
+
+                        Remember me
+
+                    </label>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn login-btn"
+                >
+                    🔐 Login
+                </button>
+
+
+                <p
+                    id="loginError"
+                    class="error-message"
+                ></p>
+
+            </form>
+
+
+            <p class="demo-info">
+                Demo Login:
+                student@lecturelens.com
+                /
+                LectureLens123
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div
+    id="appPage"
+    class="app-page hidden"
+>
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">
+                🎓
+            </div>
+
+            <div>
+
+                <h2>
+                    LectureLens
+                </h2>
+
+                <span>
+                    AI Learning Assistant
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+
+            <button
+                class="nav-btn active"
+                data-page="dashboard"
+            >
+                <span>🏠</span>
+                Dashboard
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="liveLecture"
+            >
+                <span>🎙️</span>
+                Live Lecture
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="notes"
+            >
+                <span>📝</span>
+                My Notes
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="flashcards"
+            >
+                <span>🧠</span>
+                Flashcards
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="quiz"
+            >
+                <span>❓</span>
+                Quiz
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="accessibility"
+            >
+                <span>♿</span>
+                Accessibility
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+            >
+                🚪 Logout
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAIN AREA
+    ================================================= -->
+
+    <main class="main-area">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================= -->
+
+        <header class="top-header">
+
+            <div>
+
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
+
+                <p id="pageSubtitle">
+                    Welcome back to LectureLens
+                </p>
+
+            </div>
+
+
+            <div class="header-badge">
+
+                🤖 AI Powered
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================= -->
+
+        <div class="page-container">
+
+
+
+            <!-- =================================================
+                 DASHBOARD
+            ================================================= -->
+
+            <section
+                id="dashboard"
+                class="page active-page"
+            >
+
+
+                <div class="welcome-card">
+
+                    <div>
+
+                        <h2>
+                            Welcome to LectureLens 👋
+                        </h2>
+
+                        <p>
+                            Transform your lectures into
+                            structured, accessible and
+                            AI-powered learning material.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="dashboardStartBtn"
+                        class="primary-btn"
+                    >
+                        🎙️ Start New Lecture
+                    </button>
+
+                </div>
+
+
+
+                <!-- DASHBOARD STATS -->
+
+                <div class="stats-grid">
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            🎙️
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Lectures
+                            </span>
+
+                            <strong id="lectureCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            📝
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Notes
+                            </span>
+
+                            <strong id="notesCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            🧠
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Flashcards
+                            </span>
+
+                            <strong id="flashcardCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ❓
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Quiz Questions
+                            </span>
+
+                            <strong id="quizCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="section-title">
+
+                    <h2>
+                        Quick Actions
+                    </h2>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+
+                    <button
+                        class="quick-btn"
+                        data-page-target="liveLecture"
+                    >
+
+                        <span class="quick-icon">
+                            🎙️
+                        </span>
+
+                        <strong>
+                            Start Lecture
+                        </strong>
+
+                        <small>
+                            Record a live lecture
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="quick-btn"
+                        data-page-target="notes"
+                    >
+
+                        <span class="quick-icon">
+                            📝
+                        </span>
+
+                        <strong>
+                            View Notes
+                        </strong>
+
+                        <small>
+                            Review your AI notes
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="quick-btn"
+                        data-page-target="flashcards"
+                    >
+
+                        <span class="quick-icon">
+                            🧠
+                        </span>
+
+                        <strong>
+                            Revise
+                        </strong>
+
+                        <small>
+                            Practice flashcards
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="quick-btn"
+                        data-page-target="quiz"
+                    >
+
+                        <span class="quick-icon">
+                            ❓
+                        </span>
+
+                        <strong>
+                            Take Quiz
+                        </strong>
+
+                        <small>
+                            Test your knowledge
+                        </small>
+
+                    </button>
+
+
+                </div>
+
+
+
+                <!-- FEATURES -->
+
+                <div class="section-title">
+
+                    <h2>
+                        LectureLens Features
+                    </h2>
+
+                </div>
+
+
+                <div class="feature-grid">
+
+
+                    <div class="feature-card">
+
+                        <span>
+                            🎙️
+                        </span>
+
+                        <h3>
+                            Live Transcription
+                        </h3>
+
+                        <p>
+                            Convert spoken lectures into
+                            text in real time.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <span>
+                            🤖
+                        </span>
+
+                        <h3>
+                            AI Smart Notes
+                        </h3>
+
+                        <p>
+                            Generate summaries,
+                            key points and concepts.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <span>
+                            🌐
+                        </span>
+
+                        <h3>
+                            Multilingual
+                        </h3>
+
+                        <p>
+                            Translate your notes into
+                            multiple languages.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <span>
+                            ♿
+                        </span>
+
+                        <h3>
+                            Accessible Learning
+                        </h3>
+
+                        <p>
+                            Designed for different
+                            learning needs.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 LIVE LECTURE
+            ================================================= -->
+
+            <section
+                id="liveLecture"
+                class="page"
+            >
+
+
+                <div class="section-heading">
+
+                    <h2>
+                        🎙️ Live Lecture
+                    </h2>
+
+                    <p>
+                        Capture your lecture and turn it
+                        into AI-powered notes.
+                    </p>
+
+                </div>
+
+
+
+                <!-- CONTROLS -->
+
+                <div class="lecture-control-card">
+
+
+                    <div class="control-group">
+
+                        <label for="languageSelect">
+                            🎤 Lecture Language
+                        </label>
+
+                        <select id="languageSelect">
+
+                            <option value="en-IN">
+                                English
+                            </option>
+
+                            <option value="hi-IN">
+                                Hindi
+                            </option>
+
+                            <option value="kn-IN">
+                                Kannada
+                            </option>
+
+                            <option value="mr-IN">
+                                Marathi
+                            </option>
+
+                            <option value="ta-IN">
+                                Tamil
+                            </option>
+
+                            <option value="te-IN">
+                                Telugu
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="control-group">
+
+                        <label for="translationSelect">
+                            🌐 Translation
+                        </label>
+
+                        <select id="translationSelect">
+
+                            <option value="Original Language">
+                                Original Language
+                            </option>
+
+                            <option value="English">
+                                English
+                            </option>
+
+                            <option value="Hindi">
+                                Hindi
+                            </option>
+
+                            <option value="Kannada">
+                                Kannada
+                            </option>
+
+                            <option value="Marathi">
+                                Marathi
+                            </option>
+
+                            <option value="Tamil">
+                                Tamil
+                            </option>
+
+                            <option value="Telugu">
+                                Telugu
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- RECORDING -->
+
+                <div class="recording-card">
+
+
+                    <div
+                        id="recordingIndicator"
+                        class="recording-indicator"
+                    >
+
+                        <span class="recording-dot">
+                            ●
+                        </span>
+
+                        Ready to record
+
+                    </div>
+
+
+                    <div class="recording-controls">
+
+
+                        <button
+                            id="startLectureBtn"
+                            class="primary-btn"
+                        >
+
+                            🎙️ Start Lecture
+
+                        </button>
+
+
+                        <button
+                            id="stopLectureBtn"
+                            class="secondary-btn"
+                            disabled
+                        >
+
+                            ⏹️ Stop Lecture
+
+                        </button>
+
+
+                    </div>
+
+
+                    <p
+                        id="lectureStatus"
+                        class="lecture-status"
+                    >
+                        Click Start Lecture to begin.
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- TRANSCRIPT -->
+
+                <div class="content-card">
+
+
+                    <div class="card-heading">
+
+                        <div>
+
+                            <h3>
+                                📄 Live Transcript
+                            </h3>
+
+                            <p>
+                                Your spoken lecture will
+                                appear here.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="transcript"
+                        class="transcript-box"
+                    >
+                        Your transcript will appear here...
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- GENERATE NOTES -->
+
+                <div class="generate-section">
+
+
+                    <button
+                        id="generateNotesBtn"
+                        class="primary-btn large-btn"
+                    >
+
+                        ✨ Generate Smart Notes
+
+                    </button>
+
+
+                    <button
+                        id="regenerateNotesBtn"
+                        class="secondary-btn"
+                    >
+
+                        🔄 Regenerate Notes
+
+                    </button>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 NOTES
+            ================================================= -->
+
+            <section
+                id="notes"
+                class="page"
+            >
+
+
+                <div class="section-heading">
+
+                    <h2>
+                        📝 My Notes
+                    </h2>
+
+                    <p>
+                        Your AI-generated structured
+                        lecture notes.
+                    </p>
+
+                </div>
+
+
+
+                <!-- TRANSLATION -->
+
+                <div class="translation-box">
+
+                    <div>
+
+                        <h3>
+                            🌐 Translate Notes
+                        </h3>
+
+                        <p>
+                            Translate your AI-generated
+                            lecture notes into another language.
+                        </p>
+
+                    </div>
+
+
+                    <div class="translation-controls">
+
+                        <select id="notesLanguageSelect">
+
+                            <option value="English">
+                                English
+                            </option>
+
+                            <option value="Hindi">
+                                Hindi
+                            </option>
+
+                            <option value="Kannada">
+                                Kannada
+                            </option>
+
+                            <option value="Marathi">
+                                Marathi
+                            </option>
+
+                            <option value="Tamil">
+                                Tamil
+                            </option>
+
+                            <option value="Telugu">
+                                Telugu
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            id="translateNotesBtn"
+                            class="secondary-btn"
+                        >
+
+                            🌐 Translate Notes
+
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        id="translationStatus"
+                        class="translation-status"
+                    ></p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     STEP 12
+                     AI VISUAL & DIAGRAM ANALYSIS
+                ================================================= -->
+
+                <div class="visual-analysis-box">
+
+
+                    <div class="visual-analysis-header">
+
+                        <div class="visual-analysis-icon">
+                            🖼️
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                AI Visual & Diagram Analysis
+                            </h3>
+
+                            <p>
+                                Upload a lecture diagram,
+                                chart, flowchart or educational
+                                image and let AI explain it.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- UPLOAD AREA -->
+
+                    <div
+                        id="diagramUploadArea"
+                        class="diagram-upload-area"
+                    >
+
+                        <label
+                            for="diagramInput"
+                            class="diagram-upload-label"
+                        >
+
+                            <div class="upload-icon">
+                                📤
+                            </div>
+
+                            <h4>
+                                Upload Lecture Diagram
+                            </h4>
+
+                            <p>
+                                Click here to choose an image
+                            </p>
+
+                            <span>
+                                PNG, JPG or JPEG
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="file"
+                            id="diagramInput"
+                            accept="image/png,image/jpeg,image/jpg"
+                            hidden
+                        >
+
+                    </div>
+
+
+
+                    <!-- PREVIEW -->
+
+                    <div
+                        id="diagramPreviewContainer"
+                        class="diagram-preview-container hidden"
+                    >
+
+                        <div class="preview-heading">
+
+                            <h4>
+                                👀 Image Preview
+                            </h4>
+
+                        </div>
+
+
+                        <img
+                            id="diagramPreview"
+                            src=""
+                            alt="Uploaded lecture diagram preview"
+                            class="diagram-preview"
+                        >
+
+
+                        <button
+                            id="removeDiagramBtn"
+                            class="secondary-btn"
+                        >
+
+                            🗑️ Remove Image
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ANALYZE -->
+
+                    <div class="diagram-action">
+
+                        <button
+                            id="analyzeDiagramBtn"
+                            class="primary-btn"
+                            disabled
+                        >
+
+                            🔍 Analyze Diagram with AI
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <p
+                        id="diagramAnalysisStatus"
+                        class="translation-status"
+                    ></p>
+
+
+
+                    <!-- RESULT -->
+
+                    <div
+                        id="diagramAnalysisResult"
+                        class="diagram-analysis-result hidden"
+                    >
+
+                        <div class="result-heading">
+
+                            <span>
+                                🤖
+                            </span>
+
+                            <h4>
+                                AI Visual Analysis
+                            </h4>
+
+                        </div>
+
+
+                        <div
+                            id="diagramAnalysisContent"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- NOTES CONTENT -->
+
+                <div id="notesContent">
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+                            📝
+                        </div>
+
+                        <h3>
+                            No notes yet
+                        </h3>
+
+                        <p>
+                            Start a lecture and generate
+                            AI notes to see them here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 FLASHCARDS
+            ================================================= -->
+
+            <section
+                id="flashcards"
+                class="page"
+            >
+
+
+                <div class="section-heading">
+
+                    <h2>
+                        🧠 Flashcards
+                    </h2>
+
+                    <p>
+                        Review important concepts from
+                        your lectures.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="flashcardContainer"
+                    class="flashcards-container"
+                >
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+                            🧠
+                        </div>
+
+                        <h3>
+                            No flashcards yet
+                        </h3>
+
+                        <p>
+                            Generate AI notes first to
+                            create flashcards.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 QUIZ
+            ================================================= -->
+
+            <section
+                id="quiz"
+                class="page"
+            >
+
+
+                <div class="section-heading">
+
+                    <h2>
+                        ❓ Quiz
+                    </h2>
+
+                    <p>
+                        Test your understanding of
+                        the lecture.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="quizContainer"
+                    class="quiz-container"
+                >
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+                            ❓
+                        </div>
+
+                        <h3>
+                            No quiz yet
+                        </h3>
+
+                        <p>
+                            Generate AI notes first to
+                            create quiz questions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ACCESSIBILITY
+            ================================================= -->
+
+            <section
+                id="accessibility"
+                class="page"
+            >
+
+
+                <div class="section-heading">
+
+                    <h2>
+                        ♿ Accessibility
+                    </h2>
+
+                    <p>
+                        Customize LectureLens for
+                        your learning preferences.
+                    </p>
+
+                </div>
+
+
+
+                <!-- FONT SIZE -->
+
+                <div class="accessibility-card">
+
+
+                    <div class="accessibility-card-heading">
+
+                        <span>
+                            🔤
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Text Size
+                            </h3>
+
+                            <p>
+                                Adjust the size of lecture
+                                content.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <select id="fontSizeSelect">
+
+                        <option value="normal">
+                            Normal
+                        </option>
+
+                        <option value="large">
+                            Large
+                        </option>
+
+                        <option value="xlarge">
+                            Extra Large
+                        </option>
+
+                    </select>
+
+
+                </div>
+
+
+
+                <!-- SPACING -->
+
+                <div class="accessibility-card">
+
+
+                    <div class="accessibility-card-heading">
+
+                        <span>
+                            ↔️
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Text Spacing
+                            </h3>
+
+                            <p>
+                                Increase spacing for
+                                easier reading.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <select id="spacingSelect">
+
+                        <option value="normal">
+                            Normal
+                        </option>
+
+                        <option value="wide">
+                            Wide
+                        </option>
+
+                        <option value="extra">
+                            Extra Wide
+                        </option>
+
+                    </select>
+
+
+                </div>
+
+
+
+                <!-- CONTRAST -->
+
+                <div class="accessibility-card">
+
+
+                    <div class="accessibility-card-heading">
+
+                        <span>
+                            ◐
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                High Contrast
+                            </h3>
+
+                            <p>
+                                Improve visibility and
+                                readability.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="contrastBtn"
+                        class="secondary-btn"
+                    >
+                        Enable
+                    </button>
+
+
+                </div>
+
+
+
+                <!-- ACCESSIBILITY FEATURES -->
+
+                <div class="accessibility-info">
+
+
+                    <h3>
+                        💡 LectureLens Accessibility
+                    </h3>
+
+
+                    <ul>
+
+                        <li>
+                            🎙️ Real-time lecture transcription
+                        </li>
+
+                        <li>
+                            📝 Structured AI-generated notes
+                        </li>
+
+                        <li>
+                            🌐 Multilingual translation
+                        </li>
+
+                        <li>
+                            🖼️ AI visual and diagram explanation
+                        </li>
+
+                        <li>
+                            🔤 Adjustable text size
+                        </li>
+
+                        <li>
+                            ↔️ Adjustable text spacing
+                        </li>
+
+                        <li>
+                            ◐ High-contrast reading mode
+                        </li>
+
+                    </ul>
+
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
