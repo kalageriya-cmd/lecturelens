@@ -1115,7 +1115,7 @@ select:focus {
 #diagramAnalysisContent {
     color: #394150;
 
-    white-space: pre-wrap;
+    
 }
 
 
@@ -1774,4 +1774,81 @@ p {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
+}
+/* =====================================================
+   SECURITY VERIFICATION PAGE
+===================================================== */
+
+.security-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #f5f7fb;
+}
+
+.security-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    padding: 40px 35px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.security-icon {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef2ff;
+    font-size: 35px;
+}
+
+.security-card h1 {
+    margin-bottom: 5px;
+    font-size: 28px;
+}
+
+.security-title {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.security-text {
+    margin-bottom: 25px;
+    color: #667085;
+}
+
+.security-input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: 8px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.security-input-group input:focus {
+    border-color: #667eea;
+}
+
+.security-btn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.security-demo {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #98a2b3;
 }
